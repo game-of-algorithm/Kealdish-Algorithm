@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 using std::vector;
+using std::swap;
 
 void chooseSort(vector<int> vt) {
     
@@ -39,7 +40,7 @@ void chooseSort(vector<int> vt) {
  * 取待排序区队首元素插入到有序区中合适的位置，再循环往复。
  */
 
-void quickInsertSort(vector<int> vt) {
+void insertSort(vector<int> vt) {
 
     for (int i = 0; i < vt.size(); i++)
     {
@@ -70,29 +71,31 @@ void quickInsertSort(vector<int> vt) {
  */
 
 void shellSort(vector<int> vt) {
-    int increment = vt.size(); 
-    int start = 0;
-    int end = vt.size() - 1;
-    int temp = 0;
-    
-    do { 
-        increment = increment / 3 + 1;
-        
-        for (int i = start + increment; i <= end; ++i) {    //对每个划分进行直接插入排序
-            
-            if (vt[i - increment] > vt[i]) {
-                temp = vt[i];
-                int j = i - increment;
-                do {    //移动元素并寻找位置
-                    vt[j + increment] = vt[j];
-                    j -= increment;
-                } while (j >= start && vt[j] > temp);
-                
-                vt[j + increment] = temp; 
-            }
-        }
+    // 数组长度
+    int n = vt.size();
 
-    } while (increment > 1);
+    // 步长
+    int h = n / 3 + 1;
+    
+    while (h >= 1)
+    {
+        for (int i = h; i < n; i++)
+        {
+            int e = vt[i];
+            int j;
+
+            // 对 vt[i], vt[i-h], vt[i-2h] ... 进行插入排序
+            for (int j = i; j >= h && e < vt[j-h] ; j-=h)
+            {
+                vt[j] = vt[j-h];
+            }
+            
+            vt[j] = e;
+        }
+        
+        h = h / 3 + 1;
+    }
+
 }
 
 /**
@@ -102,7 +105,7 @@ void shellSort(vector<int> vt) {
  * 
  */
 
-void mergeVector(vector<int> a, int first, int mid, int last, vector<int> temp)  
+void mergeVector(vector<int> a, int first, int mid, int last, int *temp)  
 {  
     int i = first, j = mid + 1;  
     int m = mid,   n = last;  
@@ -126,7 +129,7 @@ void mergeVector(vector<int> a, int first, int mid, int last, vector<int> temp)
         a[first + i] = temp[i];  
 }
 
-void mergesort(vector<int> a, int first, int last, vector<int> temp)  
+void mergesort(vector<int> a, int first, int last, int *temp)  
 {  
     if (first < last)  
     {  
@@ -138,11 +141,12 @@ void mergesort(vector<int> a, int first, int last, vector<int> temp)
 }
 
 bool MergeSort(vector<int> a)  
-{  
+{
+    int n = a.size();
     int *p = new int[n];  
     if (p == NULL)  
         return false;  
-    mergesort(a, 0, a.zie() - 1, p);  
+    mergesort(a, 0, a.size() - 1, p);  
     delete[] p;  
     return true;  
 }
@@ -336,7 +340,7 @@ vector<int> merge(vector<int> leftVt, vector<int> rightVt) {
     return vt;
 }
 
-vector<int> sortList(vector<int> vt, int start, int end, vector<int> res) {
+vector<int> sortList(vector<int> vt, int start, int end) {
     if (start < end)
     {
         int mid = (start + end) / 2;
