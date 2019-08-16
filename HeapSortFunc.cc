@@ -227,9 +227,6 @@ public:
     }
 };
 
-
-
-
 /**
  * 2.4.29 同时面向最大和最小元素的优先队列。设计一个数据类型，支持如下操作：插入元素、删除最大元素、
  * 删除最小元素（所需时间均为对数级），以及找到最大元素、找到最小元素（所需时间均为常数级别）。
@@ -247,3 +244,30 @@ public:
  * 随后对交换后的元素先进行 Swim 再进行 Sink，移动到正确的位置上。
  * 
  */
+
+struct MinMaxNode
+{
+    int value;  // 节点的值
+    int index;  // 节点在当前数组中的下标
+    MinMaxNode *pair;   // 指向孪生结点的指针
+
+    MinMaxNode(int v, int i) {
+        value = v;
+        index = i;
+    }
+};
+
+pubic class Solution {
+public:
+    void createPairNodes(int value, int index, MinMaxNode *minNode, MinMaxNode *maxNode) {
+        minNode = MinMaxNode(value, index);
+        maxNode = MinMaxNode(value, index);
+        minNode->pair = maxNode;
+        maxNode->pair = minNode;
+    }
+
+};
+
+public class MaxPQ {
+    
+};
