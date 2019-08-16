@@ -74,10 +74,157 @@ void maxHeap(int a[], int n)
  * 要交换次数最多，就需在堆顶元素与堆尾元素交换后下沉最多，要想下沉最多可以在堆顶元素与堆尾元素交换时让堆尾元素是堆中的最小元素。
  * 按照这个方法就可以构建一个比较次数最多的大堆。反过来操作就可以得到一个比较次数最少的大堆。
  * 
+ * 1 4 7 12 10 16 14 19 17 20 5 27 8 28 2 24 9 18 6 23 11 22 21 31 13 26 25 30 15 29 3 32
+ * 
  */
 
+#include <vector>
+#include <cmath>
+using std::vector;
+using std::pow;
+using std::floor;
+using std::log10;
+
 public class WorstHeap {
-    
+private:
+    vector<int> pq;   // 保存元素的数组
+    int n;      // 堆中的元素数量
+public:
+    WorstHeap(int capacity) {
+        this.n = 0;
+    }
+
+    // 制造堆排序的最坏情况
+    vector<int> makeWorst(int n) {
+        vector<int> strategy = win(n);
+
+        for (int i = 0; i < strategy.size(); i++)
+        {
+            unremoveMax(strategy[i]);
+        }
+        
+        for (int i = 1; i <= this.n / 2; i++)
+        {
+            unfixHeap(i);
+        }
+        
+        vector<int> worstCase;
+        for (int i = 1; i <= n; i++)
+        {
+            worstCase[i - 1] = this.pq[i];
+        }
+        
+        return worstCase;
+    }
+
+    bool less(int i, int j) {
+        return this.pq[i] < this.pq[j];
+    }
+
+    int pullDown(int i, int j) {
+        int toReturn = this.pq[j];
+        for (int m = j; m / 2 >= i; m /= 2)
+        {
+            this.pq[m] = this.pq[m/2];
+        }
+        return toReturn;
+    }
+
+    void unfixHeap(int i) {
+        int j = i * pow(2, floor(log10(this.n / i) / log10(2)));
+        this.pq[i] = pullDown(i, j);
+    }
+
+    void unremoveMax(int i) {
+        int p = (this.n + 1) / 2;
+        if (less(p, i))
+        {
+            return;
+        }
+
+        this.n++;
+        this.pq[this.n] = pullDown(1, i);
+        this.pq[1] = this.n;
+        
+    }
+
+    vector<int> par(int l) {
+        int n = pow(2, l) - 1;
+        int[] s7 = { 0, 1, 2, 3, 4, 4, 5 };
+        vector<int> vt;
+        for (int i = 0; i < min(n, 7); i++)
+        {
+            vt[i] = s7[i];
+        }
+        
+        if (n <= 7)
+        {
+            return vt;
+        }
+        
+        for (int lev = 3; lev < l; lev++)
+        {
+            int i = pow(2, lev) - 1;
+            vt[i] = i;
+            vt[i + 1] = i - 1;
+            vt[i + 2] = i + 1;
+            vt[i + 3] = i + 2;
+            vt[i + 4] = i + 4;
+            vt[i + 5] = i + 3;
+
+            for (int k = i + 6; k <= 2 * i; k++)
+            {
+                vt[k] = k - 1;
+            }
+            
+        }
+        
+        return vt;
+    }
+
+    vector<int> win(int n) {
+        vector<int> vt;
+        vector<int> s = par(floor(log10(n) / log10(2)) + 1);
+
+        for (int i = 1; i <= n - 1; i++)
+        {
+            vt[i] = s[i];
+        }
+
+        int k = pow(2, floor(log10(n + 1) / log10(2))) - 1;
+        
+        if (n == k || n <= k)
+        {
+            return vt;
+        }
+        
+        vt[k] = k;
+
+        if (n == k + 1)
+        {
+            return vt;
+        }
+
+        vt[k + 1] = (k + 1) / 2;
+
+        if (n == k + 2)
+        {
+            return vt;
+        }
+        
+        for (int i = k + 2; i <= n - 1; i++)
+        {
+            if (i == 2 * k -2)
+            {
+                vt[i] = i;
+            } else {
+                vt[i] = i - 1;
+            }
+            
+        }
+        
+        return vt;
+    }
 };
 
 
