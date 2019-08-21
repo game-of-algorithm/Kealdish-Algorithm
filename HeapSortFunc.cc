@@ -85,13 +85,13 @@ using std::pow;
 using std::floor;
 using std::log10;
 
-public class WorstHeap {
+class WorstHeap {
 private:
     vector<int> pq;   // 保存元素的数组
     int n;      // 堆中的元素数量
 public:
     WorstHeap(int capacity) {
-        this.n = 0;
+        this->n = 0;
     }
 
     // 制造堆排序的最坏情况
@@ -103,7 +103,7 @@ public:
             unremoveMax(strategy[i]);
         }
         
-        for (int i = 1; i <= this.n / 2; i++)
+        for (int i = 1; i <= this->n / 2; i++)
         {
             unfixHeap(i);
         }
@@ -111,40 +111,40 @@ public:
         vector<int> worstCase;
         for (int i = 1; i <= n; i++)
         {
-            worstCase[i - 1] = this.pq[i];
+            worstCase[i - 1] = this->pq[i];
         }
         
         return worstCase;
     }
 
     bool less(int i, int j) {
-        return this.pq[i] < this.pq[j];
+        return this->pq[i] < this->pq[j];
     }
 
     int pullDown(int i, int j) {
-        int toReturn = this.pq[j];
+        int toReturn = this->pq[j];
         for (int m = j; m / 2 >= i; m /= 2)
         {
-            this.pq[m] = this.pq[m/2];
+            this->pq[m] = this->pq[m/2];
         }
         return toReturn;
     }
 
     void unfixHeap(int i) {
-        int j = i * pow(2, floor(log10(this.n / i) / log10(2)));
-        this.pq[i] = pullDown(i, j);
+        int j = i * pow(2, floor(log10(this->n / i) / log10(2)));
+        this->pq[i] = pullDown(i, j);
     }
 
     void unremoveMax(int i) {
-        int p = (this.n + 1) / 2;
+        int p = (this->n + 1) / 2;
         if (less(p, i))
         {
             return;
         }
 
-        this.n++;
-        this.pq[this.n] = pullDown(1, i);
-        this.pq[1] = this.n;
+        this->n++;
+        this->pq[this->n] = pullDown(1, i);
+        this->pq[1] = this->n;
         
     }
 
@@ -257,7 +257,7 @@ struct MinMaxNode
     }
 };
 
-pubic class Solution {
+class Solution {
 public:
     void createPairNodes(int value, int index, MinMaxNode *minNode, MinMaxNode *maxNode) {
         minNode = MinMaxNode(value, index);
@@ -268,6 +268,6 @@ public:
 
 };
 
-public class MaxPQ {
-    
+class MaxPQ {
+   
 };
