@@ -20,6 +20,7 @@ void search() {
         string key = keys[i];
 
         if (st.get(key) > st.get(max))
+        
         {
             max = key;
             vt.clear();
