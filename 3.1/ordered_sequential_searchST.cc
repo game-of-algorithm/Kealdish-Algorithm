@@ -27,7 +27,7 @@ public:
         last = nullptr;
     }
 
-    bool contains(String key) {
+    bool contains(string key) {
         Node *tmp = first;
         while (tmp != nullptr && less(key, tmp->key))
         {

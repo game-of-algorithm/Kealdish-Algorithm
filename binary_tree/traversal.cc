@@ -79,26 +79,24 @@ void inorder_noncursive(TreeNode *root) {
     }
 
     stack<TreeNode *> stack;
-    stack.push(root);
     
-    while (!stack.empty())
-    {
-        TreeNode *node = stack.top();
-        stack.pop();
+    TreeNode *node = root;
+    // 先处理左子树，后处理右子树
 
-        if (node->left == nullptr)
+    while (node != nullptr || !stack.empty())
+    {
+        // 先处理左子树，将左子树按序压入栈中
+        while (node != nullptr)
         {
-            cout<<node->val<<endl;
-        } else {
-            if (node->right != nullptr)
-            {
-                stack.push(node->right);
-            }
-            
             stack.push(node);
-            stack.push(node->left);
+            node = node->left;
         }
         
+        node = stack.top();
+        stack.pop();
+        cout<<node->val<<endl;
+        node = node->right; // 处理右子树
+
     }
     
 }
