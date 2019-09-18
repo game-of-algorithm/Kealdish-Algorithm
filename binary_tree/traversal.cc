@@ -117,40 +117,49 @@ void postOrder_recursive(TreeNode *root) {
     
 }
 
+// 先将结点的左子树一直遍历一直压栈，到树底部后开始弹栈。
+// 先输出左子节点，如果右子节点为空或者已经访问过右子节点则输出自身，继续弹栈。
+// 否则，压入右子节点，并继续压左子树。
 void postOrder_nonrecursive(TreeNode *root) {
+    
     if (root == nullptr)
     {
         return;
     }
 
     stack<TreeNode *> stack;
-
-    stack.push(root);
+    TreeNode *lastVisitedNode = nullptr;
+    TreeNode *node = root;
+    
+    stack.push(node);
+    node = node->left;
 
     while (!stack.empty())
     {
-        TreeNode *node = stack.top();
-        stack.pop();
-
-        if (node->left == nullptr && node->right == nullptr)
+        while (node != nullptr)
         {
-            cout<<node->val<<endl;
-        } else {
             stack.push(node);
-
-            if (node->right != nullptr)
-            {
-                stack.push(node->right);
-            }
-
-            if (node->left != nullptr)
-            {
-                stack.push(node->left);
-            }
-            
+            node = node->left;
         }
         
+        node = stack.top();
+        stack.pop();
+
+        cout<<node->val<<endl;
+        lastVisitedNode = node;
+
+        node = stack.top();
+
+        if (node->right == nullptr || node->right == lastVisitedNode)
+        {
+            stack.pop();
+            cout<<node->val<<endl;
+            lastVisitedNode = node;
+        } else {
+            node = node->right;
+        }
     }
+    
     
     
 }
